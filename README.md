@@ -211,7 +211,7 @@ There are several ways to create a static website in Azure. In this lab I will e
 
 It will successfully create you CD pipeline. You can run this manually to check its functionality 
 ![](/BBBank_UI/src/assets/images/38.png)
-
+ checking
 
 
 
