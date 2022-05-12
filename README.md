@@ -40,6 +40,7 @@ Our recent output result at localhost looks like this
 - We will create Continuos Integrated CI Build Pipeline
 - We will set a stage ( necessary permissions) before release pipeline.
 - We will create Continuous Deployment CD Release Pipeline
+- We will make changes in API and UI codes
 ---------------
 
 ## Step 1: Creating Static Website in Azure
@@ -142,3 +143,76 @@ There are several ways to create a static website in Azure. In this lab I will e
 - Enabling it will automatically start this pipeline whenever there is a change in github repository.
 - Save and run your pipeline
 ![](/BBBank_UI/src/assets/images/27.png)
+
+- After running the pipeline it will follow all the steps and give this output if successful
+- Here you can find the location of artifact
+- We will publish this artifact in static website via CD pipeline
+![](/BBBank_UI/src/assets/images/31.png)
+
+
+-----------------
+## Step 3: Giving permission to organization to make changes in our Static Website
+
+- Before moving on to CD pipeline we will first make changes in CI pipeline
+- Open Azure Portal and go to the static website we created
+- In left menu go to *Access Control (IAM)* and add role assignment
+![](/BBBank_UI/src/assets/images/28.png)
+
+- First we will give Owner role to our organization
+- Select Owner tab, click 'select member', search your organization name and save it
+![](/BBBank_UI/src/assets/images/29.png)
+
+- Now we will assign *Storage blob data owner* role in the same way
+![](/BBBank_UI/src/assets/images/30.png)
+
+- Follow the same procedures for Production storage account
+
+-------------------------
+
+## Step 4: Creating CD pipeline
+
+- Now we will take our artifact from drop location of CI pipeline and publish it to Static webapp $web location
+- To do this go to release pipeline from the left menu and create new pipeline
+
+ ![](/BBBank_UI/src/assets/images/32.png)
+
+ - Select Empty job so we can add tasks to it later
+ - Give meaningful name to this stage and save it
+ ![](/BBBank_UI/src/assets/images/33.png)
+
+ - Now we add 2 tasks for this stage
+ - First we will delete all the files from $web location so there will be no residual in it
+ - Then we will publish our new artifact in $web location
+ - To delete existing files from location, search Azure CLI and add it
+ - We will run this powershell script to delete this file
+ ```powershell
+ az storage blob delete-batch --source '$web' --account-name bbbankuitest
+ ```
+- In Azure Cli task select your subscription
+- Our script will inline Powershell script
+- We will run the above given script with our storage account name in the end
+![](/BBBank_UI/src/assets/images/34.png)
+
+- This will delete all the files from given location ($web) in static website
+
+- Now we will add another task to publish our artifact in static website
+- For this you need to add another task named *Azure file copy*
+![](/BBBank_UI/src/assets/images/35.png)
+
+- Give name to this task
+- Give the exact location of artifact which we dropped in CI pipeline
+- Select the subscription in which our storage account is
+- Write exact name of your storage account and container 
+![](/BBBank_UI/src/assets/images/36.png)
+
+- In last process enable continuous trigger from this tab
+- Enabling it will automatically run this pipeline whenever there is new file in drop location
+![](/BBBank_UI/src/assets/images/37.png)
+
+It will successfully create you CD pipeline. You can run this manually to check its functionality 
+![](/BBBank_UI/src/assets/images/38.png)
+
+
+
+
+
