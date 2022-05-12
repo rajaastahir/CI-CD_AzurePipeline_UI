@@ -253,7 +253,7 @@ builder =>
  {
         builder.WithOrigins("http://localhost:4200" ,
                                   "https://bbbankuitest.z13.web.core.windows.net/",
-                          "https://bbbankuiproduction.z13.web.core.windows.net/"
+                          "https://bbbankuiproduction.z13.web.core.windows.net/")
 .AllowAnyHeader()
 .AllowAnyMethod();
                       });
@@ -269,6 +269,40 @@ and
 https://bbbankuitest.z13.web.core.windows.net/
 
 ----------------
+
+## Final Output in Azure Website 
+
+Now if you make any changes in and commit all the changes. It will automatically trigger our CI pipeline.
+
+Then our CI pipeline will drop artifact in provided drop location which will automatically trigger CD pipeline
+
+It will complete its tasks and will publish the artifact in given location
+
+Now you can run your UI's Url and it will give this output
+![](/images/39.png)
+
+---------------
+## Production Environment
+
+- We have already created static website for production environment
+- Already allowed Cross Origin Request for production by pasting its URL in API
+- We will keep our BUILD CI Pipelines as it is
+- Now we will make some changes in Release CD Pipeline
+- From release pipeline we created before, we will clone our Test environment 
+- We will make this stage trigger manually. We want it to work only when we have finalized our test cases. 
+![](/images/40.png)
+
+ - We will make 2 changes in production stage
+ - In first task where we deleted residual files from the folder we have to provide new location in which our production storage account is located
+ ![](/images/41.png)
+
+ - Now we will change the location of files to be copied in the second task.
+ ![](/images/42.png)
+
+ - Remaining items will remain the same.
+ - Now if you run this run this stage manually you will be able to see your UI from the URL of production static website.
+ 
+ --------------------
 
 
 
