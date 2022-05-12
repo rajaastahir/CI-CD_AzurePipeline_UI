@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrlBase: 'https://bbbankapi.azurewebsites.net/api/'
+  apiUrlBase: 'https://bbbankapitest.azurewebsites.net/api/'
 };

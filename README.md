@@ -209,8 +209,70 @@ There are several ways to create a static website in Azure. In this lab I will e
 - Enabling it will automatically run this pipeline whenever there is new file in drop location
 ![](/images/37.png)
 
-It will successfully create you CD pipeline. You can run this manually to check its functionality 
+- It will successfully create you CD pipeline. You can run this manually to check its functionality 
 ![](/images/38.png)
+
+---------------------
+
+## Step 5: Final changes in UI and API code
+
+Now we are not hosting out API and website locally we have to make some changes in the code.
+### 1) Changes in UI
+- First in our UI code we have *environments.ts* file which has the URL of our API which we had previously hosted in local memory 
+
+```C#
+export const environment = {
+  production: false,
+  apiUrlBase: 'http://localhost:5070/api/'
+};
+```
+
+- Now we will replace this Api Url Base with the URL on which our Api is hosted
+- In pervious lab we showed the whole process by which we got this URL
+https://bbbankapitest.azurewebsites.net
+- Now we will copy this code and paste it in *environment.prod.ts* file. Now our UI will call below given URL of our API
+
+```C#
+export const environment = {
+  production: true,
+  apiUrlBase: 'https://bbbankapitest.azurewebsites.net/api/'
+};
+```
+
+###  2) Changes in API
+
+- Now to allow our Cross Origin Requests we have to to provide URLs of our UI's test and production environment to our API
+- In API's *program.cs* file, in our previous labs, we allowed our UI's local host to communicate with our API by providing its URL.
+- Now we will copy our URL from Static Website we created and paste it inside builder of *program.cs* folder
+
+```C#
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+builder =>
+ {
+        builder.WithOrigins("http://localhost:4200" ,
+                                  "https://bbbankuitest.z13.web.core.windows.net/",
+                          "https://bbbankuiproduction.z13.web.core.windows.net/"
+.AllowAnyHeader()
+.AllowAnyMethod();
+                      });
+});
+```
+
+-Here the Urls of our API's are:
+
+https://bbbankuiproduction.z13.web.core.windows.net/
+
+and
+
+https://bbbankuitest.z13.web.core.windows.net/
+
+----------------
+
+
+
+
 
 
 
